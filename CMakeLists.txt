@@ -15,17 +15,10 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(node1
-  src/node1.cpp
+add_executable(gps_to_odom
+  src/gps_to_odom.cpp
 )
+target_link_libraries(gps_to_odom ${catkin_LIBRARIES})
 
 
-add_executable(node2
-  src/node1.cpp
-)
-
-
-add_executable(node3
-  src/node1.cpp
-)
 
