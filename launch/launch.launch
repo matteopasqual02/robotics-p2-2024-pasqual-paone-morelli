@@ -1,7 +1,7 @@
 <launch>
-    <param name="lat_r" value="0" />
-    <param name="lon_r" value="0" />
-    <param name="alt_r" value="0" />
+    <param name="lat_r" value="45.47728696666667" />
+    <param name="lon_r" value="9.226243296666667" />
+    <param name="alt_r" value="168.40699999999998" />
 
     <node pkg="first_project" type="gps_to_odom" name="gps_to_odom" />
 

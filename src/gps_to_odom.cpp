@@ -27,31 +27,30 @@ int main(int argc, char **argv) {
     ros::Publisher publ = nodeHandle.advertise<nav_msgs::Odometry>("/gps_odom", 1);
     ros::Subscriber subscr = nodeHandle.subscribe("/fix", 1, fixCallback);
 
-    ros::Rate loop_rate(1000);
+    ros::Rate loop_rate(10);
+
+    double lat_lon_rad[2];
+    double reference_ECEF[3];
+    double ECEF[3];
+    double ENU[3];
 
     while(ros::ok()) {
         nav_msgs::Odometry private_message;
 
-        double lat_lon_rad[2];
         lat_lon_rad[0] = M_PI * lat / 180;
         lat_lon_rad[1] = M_PI * lon / 180;
 
-        double ECEF[3];
         ECEF[0] = ( Ntheta() + alt ) * cos(lat_lon_rad[0]) * cos(lat_lon_rad[1]);
         ECEF[1] = ( Ntheta() + alt ) * cos(lat_lon_rad[0]) * sin(lat_lon_rad[1]);
         ECEF[2] = ( Ntheta() * (1-e_square) + alt ) * cos(lat_lon_rad[0]) * sin(lat_lon_rad[1]);
 
-        double ENU[3];
+        ROS_INFO("debugging");
 
         private_message.pose.pose.position.x = ECEF[0];
         private_message.pose.pose.position.y = ECEF[1];
         private_message.pose.pose.position.z = ECEF[2];
 
-        /*
-        private_message.pose.pose.position.x = lat;
-        private_message.pose.pose.position.y = lon;
-        private_message.pose.pose.position.z = alt;
-*/
+  
         publ.publish(private_message);
         ros::spinOnce();
         loop_rate.sleep();
