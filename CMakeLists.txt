@@ -7,7 +7,8 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   dynamic_reconfigure
   roscpp
-)
+  tf
+        )
 
 generate_dynamic_reconfigure_options(
   cfg/parameters.cfg
@@ -31,4 +32,7 @@ add_executable(lidar_remap
 )
 add_dependencies(lidar_remap ${PROJECT_NAME}_gencfg)
 target_link_libraries(lidar_remap ${catkin_LIBRARIES})
+
+add_executable(odom_to_tf src/odom_to_tf.cpp)
+target_link_libraries(odom_to_tf ${catkin_LIBRARIES})
 
