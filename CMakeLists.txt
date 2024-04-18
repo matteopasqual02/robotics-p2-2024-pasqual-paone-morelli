@@ -20,5 +20,3 @@ add_executable(gps_to_odom
 )
 target_link_libraries(gps_to_odom ${catkin_LIBRARIES})
 
-
-
