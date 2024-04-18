@@ -1,14 +1,14 @@
 #include "ros/ros.h"
 #include "sensor_msgs/PointCloud2.h"
 #include <dynamic_reconfigure/server.h>
-#include <parameter_test/parametersConfig.h>
+#include <first_project/parametersConfig.h>
 
 class LidarRemap{
 private:
     ros::NodeHandle nodeHandle;
     ros::Publisher publ;
     ros::Subscriber subscr; 
-    dynamic_reconfigure::Server<parameter_test::parametersConfig> server;
+    dynamic_reconfigure::Server<first_project::parametersConfig> server;
     std::string frame_id;     
 
 public:
@@ -19,8 +19,8 @@ public:
         server.setCallback(boost::bind(&LidarRemap::reconfigCallback, this, _1, _2));
     }
 
-    void reconfigCallback(parameter_test::parametersConfig &config, uint32_t level) {
-        frame_id = config.frame_id;
+    void reconfigCallback(first_project::parametersConfig &config, uint32_t level) {
+        frame_id = config.topic_choice;
     }
 
     void pointCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
