@@ -61,6 +61,9 @@ int main(int argc, char **argv) {
     ENU[0] =0;
     ENU[1] =0;
     ENU[2] =0;
+    ECEF[0] = reference_ECEF[0];
+    ECEF[1] = reference_ECEF[1];
+    ECEF[2] = reference_ECEF[2];
 
     while(ros::ok()) {
         nav_msgs::Odometry private_message;
