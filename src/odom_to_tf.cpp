@@ -6,10 +6,12 @@
 
 class tf_sub_pub{
 public:
-    tf_sub_pub(){
-        ros::NodeHandle nodeHandle;
-        nodeHandle.getParam("child_frame",child_frame); //mette il parametro child_frame in child_frame
-        nodeHandle.getParam("root_frame",root_frame);
+    tf_sub_pub() : nh_private("~"){
+
+        nh_private.getParam("child_frame",child_frame); //mette il parametro child_frame in child_frame
+        nh_private.getParam("root_frame",root_frame);
+        ROS_INFO("child_frame: %s", child_frame.c_str()); // Stampare il valore di child_frame
+        ROS_INFO("root_frame: %s", root_frame.c_str()); // Stampare il valore di root_frame
         sub = nodeHandle.subscribe("input_odom",1,&tf_sub_pub::callback, this);
     }
 void callback(const nav_msgs::Odometry::ConstPtr& msg){
@@ -21,13 +23,14 @@ void callback(const nav_msgs::Odometry::ConstPtr& msg){
         tf::Quaternion q;
         tf::quaternionMsgToTF(msg->pose.pose.orientation, q);
         transform.setRotation(q);
-        ROS_INFO("child_frame: %s", child_frame.c_str()); // Stampare il valore di child_frame
-        ROS_INFO("root_frame: %s", root_frame.c_str()); // Stampare il valore di root_frame
+        //ROS_INFO("child_frame: %s", child_frame.c_str()); // Stampare il valore di child_frame
+        //ROS_INFO("root_frame: %s", root_frame.c_str()); // Stampare il valore di root_frame
         br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), root_frame, child_frame));
 
 }
 private:
-    //ros::NodeHandle nodeHandle;
+    ros::NodeHandle nodeHandle;
+    ros::NodeHandle nh_private;
     tf::TransformBroadcaster br;
     ros::Subscriber sub;
     std::string root_frame;
