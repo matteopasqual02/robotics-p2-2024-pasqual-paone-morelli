@@ -33,7 +33,10 @@ add_executable(lidar_remap
 add_dependencies(lidar_remap ${PROJECT_NAME}_gencfg)
 target_link_libraries(lidar_remap ${catkin_LIBRARIES})
 
-add_executable(odom_to_tf src/odom_to_tf.cpp)
-add_dependencies(odom_to_tf ${${PROJECT_NAME}_EXPORTED_TARGETS}}${catkin_EXPORTED_TARGETS})
+add_executable(odom_to_tf 
+  src/odom_to_tf.cpp
+)
+add_dependencies(odom_to_tf ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 target_link_libraries(odom_to_tf ${catkin_LIBRARIES})
 
