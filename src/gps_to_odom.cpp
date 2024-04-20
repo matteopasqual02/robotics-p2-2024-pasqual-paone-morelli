@@ -4,9 +4,9 @@
 #include <cstdlib>
 #include <cmath>
 
-double lat = 0;
-double lon = 0;
-double alt = 0;
+double lat;
+double lon;
+double alt;
 double const a = 6378137;
 double const b = 6356752;
 double const e_square = 1- (b*b)/(a*a);
@@ -17,10 +17,10 @@ void fixCallback(const sensor_msgs::NavSatFix::ConstPtr& msg) {
     alt = msg->altitude;
 }
 double Ntheta(){
-    return a/( sqrt( 1-e_square * sin(lat*M_PI/180) * sin(lat*M_PI/180) ) );
+    return a/( sqrt( 1- (e_square * sin(lat*M_PI/180) * sin(lat*M_PI/180)) ) );
 }
 double Ntheta_r(double lat_r){
-    return a/( sqrt( 1-e_square * sin(lat_r*M_PI/180) * sin(lat_r*M_PI/180) ) );
+    return a/( sqrt( 1- (e_square * sin(lat_r*M_PI/180) * sin(lat_r*M_PI/180)) ) );
 }
 
 int main(int argc, char **argv) {
@@ -47,6 +47,10 @@ int main(int argc, char **argv) {
     nodeHandle.param("lon_r", lon_r, 0.0);
     nodeHandle.param("alt_r", alt_r, 0.0);
 
+    lat = lat_r; 
+    lon = lon_r;
+    alt = alt_r;
+
     lat_r_lon_r_rad[0] = lat_r*M_PI/180;
     lat_r_lon_r_rad[1] = lon_r*M_PI/180;
 
@@ -64,6 +68,7 @@ int main(int argc, char **argv) {
     ECEF[0] = reference_ECEF[0];
     ECEF[1] = reference_ECEF[1];
     ECEF[2] = reference_ECEF[2];
+
 
     while(ros::ok()) {
         nav_msgs::Odometry private_message;
@@ -88,6 +93,7 @@ int main(int argc, char **argv) {
         ENU[2] = (cos(lat_r_lon_r_rad[0])*cos(lat_r_lon_r_rad[1]))*(ECEF[0] - reference_ECEF[0]) 
             + (cos(lat_r_lon_r_rad[0])*sin(lat_r_lon_r_rad[1]))*(ECEF[1] - reference_ECEF[1]) 
             + (sin(lat_r_lon_r_rad[0]))*(ECEF[2] - reference_ECEF[2]);
+
 
         private_message.pose.pose.position.x = ENU[0];
         private_message.pose.pose.position.y = ENU[1];
