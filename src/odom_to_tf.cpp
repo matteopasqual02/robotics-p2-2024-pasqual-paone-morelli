@@ -15,7 +15,8 @@ public:
         ROS_INFO("root_frame: %s", root_frame.c_str()); // Stampare il valore di root_frame
         sub = nodeHandle.subscribe("input_odom",1,&tf_sub_pub::callback, this);
     }
-void callback(const nav_msgs::Odometry::ConstPtr& msg){
+
+    void callback(const nav_msgs::Odometry::ConstPtr& msg){
 
         tf::Transform transform;
         transform.setOrigin(tf::Vector3(msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z));
@@ -23,8 +24,7 @@ void callback(const nav_msgs::Odometry::ConstPtr& msg){
         tf::quaternionMsgToTF(msg->pose.pose.orientation, q);
         transform.setRotation(q);
         br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), root_frame, child_frame));
-
-}
+    }
 private:
     ros::NodeHandle nodeHandle;
     ros::NodeHandle nh_private;
@@ -36,6 +36,9 @@ private:
 
 int main(int argc, char **argv){
     ros::init(argc, argv, "odom_to_tf");
+
     tf_sub_pub my_tf_sub_pub;
     ros::spin();
-    return 0;}
+
+    return 0;
+}
