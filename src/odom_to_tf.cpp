@@ -6,8 +6,9 @@
 
 class tf_sub_pub{
 public:
-    tf_sub_pub() : nh_private("~"){
+    tf_sub_pub() {
 
+        nh_private = ros::NodeHandle("~");
         nh_private.getParam("child_frame",child_frame); //mette il parametro child_frame in child_frame
         nh_private.getParam("root_frame",root_frame);
         ROS_INFO("child_frame: %s", child_frame.c_str()); // Stampare il valore di child_frame

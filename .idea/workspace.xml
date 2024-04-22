@@ -18,9 +18,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1e2e8d7-82a2-4bad-b9c1-90563c1ae1c2" name="Changes" comment="nodo2 tutti e due">
-      <change beforePath="$PROJECT_DIR$/launch/launch.launch" beforeDir="false" afterPath="$PROJECT_DIR$/launch/launch.launch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lidar_remap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/lidar_remap.cpp" afterDir="false" />
+    <list default="true" id="a1e2e8d7-82a2-4bad-b9c1-90563c1ae1c2" name="Changes" comment="modifiche">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/odom_to_tf.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/odom_to_tf.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +74,7 @@
       <workItem from="1713509458686" duration="5545000" />
       <workItem from="1713518930125" duration="186000" />
       <workItem from="1713519224665" duration="1110000" />
-      <workItem from="1713769438088" duration="2911000" />
+      <workItem from="1713769438088" duration="3844000" />
     </task>
     <task id="LOCAL-00001" summary="aggioramento">
       <option name="closed" value="true" />
@@ -140,7 +140,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713519310078</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="modifiche">
+      <option name="closed" value="true" />
+      <created>1713772455320</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1713772455320</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,6 +165,7 @@
     <MESSAGE value="tolta la bag dal launch" />
     <MESSAGE value="nodo2" />
     <MESSAGE value="nodo2 tutti e due" />
-    <option name="LAST_COMMIT_MESSAGE" value="nodo2 tutti e due" />
+    <MESSAGE value="modifiche" />
+    <option name="LAST_COMMIT_MESSAGE" value="modifiche" />
   </component>
 </project>
