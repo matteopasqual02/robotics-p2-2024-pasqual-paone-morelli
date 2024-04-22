@@ -29,12 +29,15 @@ public:
     }
 
     void pointCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
-        
-        listener.lookupTransform(frame_id, msg->header.frame_id, ros::Time(0), stamped);
-
-        broadcaster.sendTransform(tf::StampedTransform(stamped, ros::Time::now(), "/pointcloud_remapped", msg->header.frame_id));
-        
+        sensor_msgs::PointCloud2 modified_msg = *msg;
+        modified_msg.header.frame_id = frame_id;
+   
+        //listener.lookupTransform(frame_id, msg->header.frame_id, ros::Time(0), stamped);
+        //broadcaster.sendTransform(tf::StampedTransform(stamped, ros::Time::now(), "/pointcloud_remapped", msg->header.frame_id));
+     
+        pub.publish(modified_msg);
     }
+
 };
 
 int main(int argc, char **argv) {
