@@ -13,14 +13,14 @@ private:
 
 public:
     LidarRemap() {
+        server.setCallback(boost::bind(&LidarRemap::reconfigCallback, this, _1, _2));
         subscr = nodeHandle.subscribe("/os_cloud_node/points", 1, &LidarRemap::pointCloudCallback, this);
         publ = nodeHandle.advertise<sensor_msgs::PointCloud2>("/pointcloud_remapped",1);
-
-        server.setCallback(boost::bind(&LidarRemap::reconfigCallback, this, _1, _2));
     }
 
     void reconfigCallback(first_project::parametersConfig &config, uint32_t level) {
         frame_id = config.topic_choice;
+        ROS_INFO("fame_id: %s",frame_id.c_str());
     }
 
     void pointCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
