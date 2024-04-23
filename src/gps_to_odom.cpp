@@ -27,8 +27,8 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "gps_to_odom");
     ros::NodeHandle nodeHandle;
 
-    ros::Publisher publ = nodeHandle.advertise<nav_msgs::Odometry>("/gps_odom", 1);
-    ros::Subscriber subscr = nodeHandle.subscribe("/fix", 1, fixCallback);
+    ros::Publisher pub = nodeHandle.advertise<nav_msgs::Odometry>("/gps_odom", 1);      //publisher
+    ros::Subscriber sub = nodeHandle.subscribe("/fix", 1, fixCallback);                 //subscriber
 
     ros::Rate loop_rate(1);
 
@@ -38,6 +38,8 @@ int main(int argc, char **argv) {
     double reference_ECEF[3];       //trasformazione parametri in ECEF
     double ECEF[3];                 //ECEF
     double ENU[3];                  //ENU
+    double angleShift = 130.0 * M_PI / 180.0;
+    double ENU_shifted[3];          //ENU shifted
     double ENU_prec[3];             //ENU_prec
     double roll_pitch_yaw[3];       //roll pitch yaw
     double cr_sr_cp_sp_cy_sy[6];    //angoli per quaternione
@@ -65,6 +67,9 @@ int main(int argc, char **argv) {
     ENU[0] =0;
     ENU[1] =0;
     ENU[2] =0;
+    ENU_shifted[0] =0;
+    ENU_shifted[1] =0;
+    ENU_shifted[2] =0;
     ECEF[0] = reference_ECEF[0];
     ECEF[1] = reference_ECEF[1];
     ECEF[2] = reference_ECEF[2];
@@ -80,9 +85,9 @@ int main(int argc, char **argv) {
         ECEF[1] = ( Ntheta() + alt ) * cos(lat_lon_rad[0]) * sin(lat_lon_rad[1]);
         ECEF[2] = ( Ntheta() * (1-e_square) + alt ) * sin(lat_lon_rad[0]);
 
-        ENU_prec[0] = ENU[0];
-        ENU_prec[1] = ENU[1];
-        ENU_prec[2] = ENU[2];
+        ENU_prec[0] = ENU_shifted[0];
+        ENU_prec[1] = ENU_shifted[1];
+        ENU_prec[2] = ENU_shifted[2];
 
         ENU[0] = (-sin(lat_r_lon_r_rad[1]))*(ECEF[0] - reference_ECEF[0]) 
             + (cos(lat_r_lon_r_rad[1]))*(ECEF[1] - reference_ECEF[1]) 
@@ -90,18 +95,25 @@ int main(int argc, char **argv) {
         ENU[1] = (-sin(lat_r_lon_r_rad[0])*cos(lat_r_lon_r_rad[1]))*(ECEF[0] - reference_ECEF[0]) 
             + (-sin(lat_r_lon_r_rad[0])*sin(lat_r_lon_r_rad[1]))*(ECEF[1] - reference_ECEF[1]) 
             + (cos(lat_r_lon_r_rad[0]))*(ECEF[2] - reference_ECEF[2]);
-        ENU[2] = (cos(lat_r_lon_r_rad[0])*cos(lat_r_lon_r_rad[1]))*(ECEF[0] - reference_ECEF[0]) 
+
+        /*ENU[2] = (cos(lat_r_lon_r_rad[0])*cos(lat_r_lon_r_rad[1]))*(ECEF[0] - reference_ECEF[0]) 
             + (cos(lat_r_lon_r_rad[0])*sin(lat_r_lon_r_rad[1]))*(ECEF[1] - reference_ECEF[1]) 
-            + (sin(lat_r_lon_r_rad[0]))*(ECEF[2] - reference_ECEF[2]);
+            + (sin(lat_r_lon_r_rad[0]))*(ECEF[2] - reference_ECEF[2]);*/
 
+        ENU_shifted[0] = cos(angleShift) * ENU[0] - sin(angleShift) * ENU[1];
+        ENU_shifted[1] = sin(angleShift) * ENU[0] + cos(angleShift) * ENU[1];
+        ENU_shifted[2] = ENU[2];
 
-        private_message.pose.pose.position.x = ENU[0];
-        private_message.pose.pose.position.y = ENU[1];
-        private_message.pose.pose.position.z = ENU[2];
+        private_message.pose.pose.position.x = ENU_shifted[0];
+        private_message.pose.pose.position.y = ENU_shifted[1];
+        private_message.pose.pose.position.z = 0;
+        //private_message.pose.pose.position.z = ENU[2];
 
-        roll_pitch_yaw[0] = atan((ENU[0]-ENU_prec[0]) / (ENU[2]-ENU_prec[2]));
-        roll_pitch_yaw[1] = atan((ENU[2]-ENU_prec[2]) / (ENU[1]-ENU_prec[1]));
-        roll_pitch_yaw[2] = atan((ENU[0]-ENU_prec[0]) / (ENU[1]-ENU_prec[1]));
+        //roll_pitch_yaw[0] = atan((ENU[0]-ENU_prec[0]) / (ENU[2]-ENU_prec[2]));
+        //roll_pitch_yaw[1] = atan((ENU[2]-ENU_prec[2]) / (ENU[1]-ENU_prec[1]));
+        roll_pitch_yaw[0] = 0;
+        roll_pitch_yaw[1] = 0;
+        roll_pitch_yaw[2] = atan2((ENU_shifted[1]-ENU_prec[1]) , (ENU_shifted[0]-ENU_prec[0]));
 
         cr_sr_cp_sp_cy_sy[0] = cos(roll_pitch_yaw[0]/2);
         cr_sr_cp_sp_cy_sy[1] = sin(roll_pitch_yaw[0]/2);
@@ -110,21 +122,23 @@ int main(int argc, char **argv) {
         cr_sr_cp_sp_cy_sy[4] = cos(roll_pitch_yaw[2]/2);
         cr_sr_cp_sp_cy_sy[5] = sin(roll_pitch_yaw[2]/2);
 
-        quaternion[0] = cr_sr_cp_sp_cy_sy[1]*cr_sr_cp_sp_cy_sy[2]*cr_sr_cp_sp_cy_sy[4]   
+        /*quaternion[0] = cr_sr_cp_sp_cy_sy[1]*cr_sr_cp_sp_cy_sy[2]*cr_sr_cp_sp_cy_sy[4]   
                         - cr_sr_cp_sp_cy_sy[0]*cr_sr_cp_sp_cy_sy[3]*cr_sr_cp_sp_cy_sy[5] ;
         quaternion[1] = cr_sr_cp_sp_cy_sy[0]*cr_sr_cp_sp_cy_sy[3]*cr_sr_cp_sp_cy_sy[4]   
-                        + cr_sr_cp_sp_cy_sy[1]*cr_sr_cp_sp_cy_sy[2]*cr_sr_cp_sp_cy_sy[5] ;
+                        + cr_sr_cp_sp_cy_sy[1]*cr_sr_cp_sp_cy_sy[2]*cr_sr_cp_sp_cy_sy[5] ;*/
         quaternion[2] = cr_sr_cp_sp_cy_sy[0]*cr_sr_cp_sp_cy_sy[2]*cr_sr_cp_sp_cy_sy[5]   
                         - cr_sr_cp_sp_cy_sy[1]*cr_sr_cp_sp_cy_sy[3]*cr_sr_cp_sp_cy_sy[4] ;
         quaternion[3] = cr_sr_cp_sp_cy_sy[0]*cr_sr_cp_sp_cy_sy[2]*cr_sr_cp_sp_cy_sy[4]   
                         + cr_sr_cp_sp_cy_sy[1]*cr_sr_cp_sp_cy_sy[3]*cr_sr_cp_sp_cy_sy[5] ;
 
-        private_message.pose.pose.orientation.x = quaternion[0];
-        private_message.pose.pose.orientation.y = quaternion[1];
+        //private_message.pose.pose.orientation.x = quaternion[0];
+        //private_message.pose.pose.orientation.y = quaternion[1];
+        private_message.pose.pose.orientation.x = 0;
+        private_message.pose.pose.orientation.y = 0;
         private_message.pose.pose.orientation.z = quaternion[2];
         private_message.pose.pose.orientation.w = quaternion[3];
 
-        publ.publish(private_message);
+        pub.publish(private_message);
         ros::spinOnce();
         loop_rate.sleep();
     }

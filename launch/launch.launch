@@ -1,5 +1,6 @@
 <launch>
     <node name="rviz" pkg="rviz" type="rviz" />
+    <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" />
 
     <param name="lat_r" value="45.477669461666665" />
     <param name="lon_r" value="9.22674018" />

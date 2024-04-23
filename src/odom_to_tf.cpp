@@ -9,10 +9,12 @@ public:
     tf_sub_pub() {
 
         nh_private = ros::NodeHandle("~");
-        nh_private.getParam("child_frame",child_frame); //mette il parametro child_frame in child_frame
+        nh_private.getParam("child_frame",child_frame); 
         nh_private.getParam("root_frame",root_frame);
+
         ROS_INFO("child_frame: %s", child_frame.c_str()); // Stampare il valore di child_frame
         ROS_INFO("root_frame: %s", root_frame.c_str()); // Stampare il valore di root_frame
+
         sub = nodeHandle.subscribe("input_odom",1,&tf_sub_pub::callback, this);
     }
 
@@ -25,13 +27,14 @@ public:
         transform.setRotation(q);
         br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), root_frame, child_frame));
     }
-private:
-    ros::NodeHandle nodeHandle;
-    ros::NodeHandle nh_private;
-    tf::TransformBroadcaster br;
-    ros::Subscriber sub;
-    std::string root_frame;
-    std::string child_frame;
+    
+    private:
+        ros::NodeHandle nodeHandle;
+        ros::NodeHandle nh_private;
+        tf::TransformBroadcaster br;
+        ros::Subscriber sub;
+        std::string root_frame;
+        std::string child_frame;
 };
 
 int main(int argc, char **argv){
