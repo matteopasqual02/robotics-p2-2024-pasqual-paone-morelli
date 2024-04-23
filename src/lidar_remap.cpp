@@ -2,8 +2,6 @@
 #include "sensor_msgs/PointCloud2.h"
 #include <dynamic_reconfigure/server.h>
 #include <first_project/parametersConfig.h>
-#include <tf/transform_listener.h>
-#include <tf/transform_broadcaster.h>
 
 class LidarRemap {
 private:
@@ -12,9 +10,6 @@ private:
     ros::Subscriber sub;
     dynamic_reconfigure::Server<first_project::parametersConfig> server;
     std::string frame_id;
-    tf::TransformBroadcaster broadcaster;
-    tf::TransformListener listener;
-    tf::StampedTransform stamped;
 
 public:
     LidarRemap() {
@@ -26,15 +21,14 @@ public:
     void reconfigCallback(first_project::parametersConfig &config, uint32_t level) {
         frame_id = config.topic_choice;
         ROS_INFO("Frame ID: %s", frame_id.c_str());
+
     }
 
     void pointCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
         sensor_msgs::PointCloud2 modified_msg = *msg;
         modified_msg.header.frame_id = frame_id;
+        modified_msg.header.stamp = ros::Time::now();
    
-        //listener.lookupTransform(frame_id, msg->header.frame_id, ros::Time(0), stamped);
-        //broadcaster.sendTransform(tf::StampedTransform(stamped, ros::Time::now(), "/pointcloud_remapped", msg->header.frame_id));
-     
         pub.publish(modified_msg);
     }
 
