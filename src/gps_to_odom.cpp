@@ -42,6 +42,7 @@ int main(int argc, char **argv) {
     double ENU_shifted[3];          //ENU shifted
     double ENU_prec[3];             //ENU_prec
     double roll_pitch_yaw[3];       //roll pitch yaw
+    double yaw_prec;
     double cr_sr_cp_sp_cy_sy[6];    //angoli per quaternione
     double quaternion[4];           //quaternion (x,y,z,w)
 
@@ -73,6 +74,7 @@ int main(int argc, char **argv) {
     ECEF[0] = reference_ECEF[0];
     ECEF[1] = reference_ECEF[1];
     ECEF[2] = reference_ECEF[2];
+    yaw_prec=0;
 
 
     while(ros::ok()) {
@@ -113,7 +115,13 @@ int main(int argc, char **argv) {
         //roll_pitch_yaw[1] = atan((ENU[2]-ENU_prec[2]) / (ENU[1]-ENU_prec[1]));
         roll_pitch_yaw[0] = 0;
         roll_pitch_yaw[1] = 0;
-        roll_pitch_yaw[2] = atan2((ENU_shifted[1]-ENU_prec[1]) , (ENU_shifted[0]-ENU_prec[0]));
+        if(ENU_shifted[0]-ENU_prec[0] ==0){
+            roll_pitch_yaw[2] = yaw_prec;
+        }
+        else{
+            roll_pitch_yaw[2] = atan2((ENU_shifted[1]-ENU_prec[1]) , (ENU_shifted[0]-ENU_prec[0]));
+            yaw_prec = roll_pitch_yaw[2];
+        }
 
         cr_sr_cp_sp_cy_sy[0] = cos(roll_pitch_yaw[0]/2);
         cr_sr_cp_sp_cy_sy[1] = sin(roll_pitch_yaw[0]/2);
