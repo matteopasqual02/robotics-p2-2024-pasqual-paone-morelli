@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cmath>
 
+//we use these global variables so that we can access them in every function
 double lat;
 double lon;
 double alt;
@@ -27,11 +28,13 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "gps_to_odom");
     ros::NodeHandle nodeHandle;
 
+    //we define the publisher and subscribe to the /fix topic. The subscriber calls the callback method when it recieves data.
     ros::Publisher pub = nodeHandle.advertise<nav_msgs::Odometry>("/gps_odom", 1);      //publisher
     ros::Subscriber sub = nodeHandle.subscribe("/fix", 1, fixCallback);                 //subscriber
 
     ros::Rate loop_rate(1);
 
+    //we define all the parameters we will need throughout the node
     double lat_r,lon_r,alt_r;       //parametri INPUT
     double lat_r_lon_r_rad[2];      //transformazione in radianti (parametri)
     double lat_lon_rad[2];          //trasformazione in radianti
@@ -45,17 +48,21 @@ int main(int argc, char **argv) {
     double cr_sr_cp_sp_cy_sy[6];    //angoli per quaternione
     double quaternion[4];           //quaternion (x,y,z,w)
 
+    //we get the static parameters set in the launchfile, these are the first value from the gps
     nodeHandle.param("lat_r", lat_r, 0.0); 
     nodeHandle.param("lon_r", lon_r, 0.0);
     nodeHandle.param("alt_r", alt_r, 0.0);
 
+    //we set the global variables to the values we got from the parameters
     lat = lat_r; 
     lon = lon_r;
     alt = alt_r;
 
+    //we convert these values from degrees to radiants, since the <cmat> library needs radiants for sin() and cos() functions
     lat_r_lon_r_rad[0] = lat_r*M_PI/180;
     lat_r_lon_r_rad[1] = lon_r*M_PI/180;
 
+    //we get the reference values in ECEF
     reference_ECEF[0] = ( Ntheta_r(lat_r) + alt_r ) * cos(lat_r_lon_r_rad[0]) * cos(lat_r_lon_r_rad[1]);
     reference_ECEF[1] = ( Ntheta_r(lat_r) + alt_r ) * cos(lat_r_lon_r_rad[0]) * sin(lat_r_lon_r_rad[1]);
     reference_ECEF[2] = ( Ntheta_r(lat_r) * (1-e_square) + alt_r ) * sin(lat_r_lon_r_rad[0]);
