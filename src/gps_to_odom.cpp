@@ -13,6 +13,7 @@ double const b = 6356752;
 double const e_square = 1- (b*b)/(a*a);
 
 void fixCallback(const sensor_msgs::NavSatFix::ConstPtr& msg) {
+    //The subscriber's callback updates our global variables to the new values recieved. This way we can see the new values in the main function, where we process the data and publish it.
     lat = msg->latitude;
     lon = msg->longitude;
     alt = msg->altitude;
@@ -28,17 +29,18 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "gps_to_odom");
     ros::NodeHandle nodeHandle;
 
-    //we define the publisher and subscribe to the /fix topic. The subscriber calls the callback method when it recieves data.
+    //we define the publisher of the topic /gps_odom and subscribe to the /fix topic.
+    // The subscriber calls the callback method when it recieves data.
     ros::Publisher pub = nodeHandle.advertise<nav_msgs::Odometry>("/gps_odom", 1);      //publisher
     ros::Subscriber sub = nodeHandle.subscribe("/fix", 1, fixCallback);                 //subscriber
 
     ros::Rate loop_rate(1);
 
     //we define all the parameters we will need throughout the node
-    double lat_r,lon_r,alt_r;       //parametri INPUT
-    double lat_r_lon_r_rad[2];      //transformazione in radianti (parametri)
-    double lat_lon_rad[2];          //trasformazione in radianti
-    double reference_ECEF[3];       //trasformazione parametri in ECEF
+    double lat_r,lon_r,alt_r;       //INPUT parameters
+    double lat_r_lon_r_rad[2];      //transformation in radiants (parameters)
+    double lat_lon_rad[2];          //trasformation in radiants
+    double reference_ECEF[3];       //parameters transformed in ECEF
     double ECEF[3];                 //ECEF
     double ENU[3];                  //ENU
     double angleShift = 130.0 * M_PI / 180.0;
@@ -46,10 +48,10 @@ int main(int argc, char **argv) {
     double ENU_prec[3];             //ENU_prec
     double roll_pitch_yaw[3];       //roll pitch yaw
     double yaw_prec;
-    double cr_sr_cp_sp_cy_sy[6];    //angoli per quaternione
+    double cr_sr_cp_sp_cy_sy[6];    //angles for the quaternion
     double quaternion[4];           //quaternion (x,y,z,w)
 
-    //we get the static parameters set in the launchfile, these are the first value from the gps
+    //we get the static parameters set in the launchfile, these are the lat, lon and alt of the first value from the gps
     nodeHandle.param("lat_r", lat_r, 0.0); 
     nodeHandle.param("lon_r", lon_r, 0.0);
     nodeHandle.param("alt_r", alt_r, 0.0);
@@ -72,6 +74,7 @@ int main(int argc, char **argv) {
     ROS_INFO("lon_r: %f", reference_ECEF[1]);
     ROS_INFO("alt_r: %f", reference_ECEF[2]);
 
+    //we set the starting values of ENU and ECEF
     ENU[0] =0;
     ENU[1] =0;
     ENU[2] =0;
@@ -87,9 +90,11 @@ int main(int argc, char **argv) {
     while(ros::ok()) {
         nav_msgs::Odometry private_message;
 
+        //we convert these values from degrees to radiants, just like we did for the reference values.
         lat_lon_rad[0] = M_PI * lat / 180;
         lat_lon_rad[1] = M_PI * lon / 180;
 
+        //we use the formulas to calculate ECEF. The Ntheta() functions has the global variables and directly calculates the value needed for each one.
         ECEF[0] = ( Ntheta() + alt ) * cos(lat_lon_rad[0]) * cos(lat_lon_rad[1]);
         ECEF[1] = ( Ntheta() + alt ) * cos(lat_lon_rad[0]) * sin(lat_lon_rad[1]);
         ECEF[2] = ( Ntheta() * (1-e_square) + alt ) * sin(lat_lon_rad[0]);
@@ -98,6 +103,7 @@ int main(int argc, char **argv) {
         ENU_prec[1] = ENU_shifted[1];
         ENU_prec[2] = ENU_shifted[2];
 
+        //we use the formula to calculate ENU, we commented ENU[2] because ??????
         ENU[0] = (-sin(lat_r_lon_r_rad[1]))*(ECEF[0] - reference_ECEF[0]) 
             + (cos(lat_r_lon_r_rad[1]))*(ECEF[1] - reference_ECEF[1]) 
             + 0;
@@ -153,6 +159,7 @@ int main(int argc, char **argv) {
         private_message.pose.pose.orientation.z = quaternion[2];
         private_message.pose.pose.orientation.w = quaternion[3];
 
+        //we publish the new message
         pub.publish(private_message);
         ros::spinOnce();
         loop_rate.sleep();
