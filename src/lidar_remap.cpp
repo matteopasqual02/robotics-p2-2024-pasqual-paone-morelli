@@ -13,24 +13,26 @@ private:
 
 public:
     LidarRemap() {
-        //we set a callback function that handles changes in tha dynamic parameters
+        /** We set a callback function that handles changes in the dynamic parameters.
+         *  We then subscribe to the topic /os_cloud_node/points and call the pointCloudCallback to handle the data we recieve from it.
+         *  We define the publisher that will be called at the end of the callback function that remaps the frame_id.
+         */
         server.setCallback(boost::bind(&LidarRemap::reconfigCallback, this, _1, _2));
-        //we subscribe to the topc /os_cloud_node/points and call the pointCloudCallback to handle the data we recieve from it
         sub = nodeHandle.subscribe("/os_cloud_node/points", 1, &LidarRemap::pointCloudCallback, this);
-        //we define the publisher that will be called at the end of the callback function that remaps the frame_id
         pub = nodeHandle.advertise<sensor_msgs::PointCloud2>("/pointcloud_remapped", 1);
     }
 
     void reconfigCallback(first_project::parametersConfig &config, uint32_t level) {
-        //we set the variable frame_id to the dynamic parameter's current value
+        /** We set the variable frame_id to the dynamic parameter's current value
+         *  and we print it in the terminal to check its new value
+         */
         frame_id = config.topic_choice;
-        //we print the new value to check its new value
         ROS_INFO("Frame ID: %s", frame_id.c_str());
 
     }
 
     void pointCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
-        //we reset the frame_id of the input message to the value stored in our variable frame_id. We then republish it through the publish function.
+        /** We reset the frame_id of the input message to the value stored in our variable frame_id. We then republish it through the publish function.*/
         sensor_msgs::PointCloud2 modified_msg = *msg;
         modified_msg.header.frame_id = frame_id;
         modified_msg.header.stamp = ros::Time::now();
