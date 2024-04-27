@@ -8,22 +8,26 @@ class tf_sub_pub{
 public:
     tf_sub_pub() {
 
-        //we use the private nodeHandle to get the private parameters set in the launchfile
+        /**
+         * we use the private nodeHandle to get the private parameters set in the launchfile,
+         * then we print the values from the parameters to see if they are correct.
+         * By subscribing to input_odom, remapped in the launchfile, we get the input data and call the callback function, which publishes the tf.
+         */
         nh_private = ros::NodeHandle("~");
         nh_private.getParam("child_frame",child_frame); 
         nh_private.getParam("root_frame",root_frame);
 
-        //we print the values from the parameters to see if they are correct
         ROS_INFO("child_frame: %s", child_frame.c_str());
         ROS_INFO("root_frame: %s", root_frame.c_str());
 
-        //by subscribing to input_odom, remapped in the launchfile, we get the input data and call the callback function, that publishes the tf.
         sub = nodeHandle.subscribe("input_odom",1,&tf_sub_pub::callback, this);
     }
 
     void callback(const nav_msgs::Odometry::ConstPtr& msg){
 
-        //we create the tf transformation by setting the translation and rotation using the input data. We then publish the tf transform.
+        /**
+         * We create the tf transformation by setting the translation and rotation using the input data. We then publish the tf transform.
+         */
         tf::Transform transform;
         transform.setOrigin(tf::Vector3(msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z));
         tf::Quaternion q(msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
