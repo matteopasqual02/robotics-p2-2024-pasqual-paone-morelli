@@ -15,7 +15,7 @@ public:
     LidarRemap() {
         /**
          * We set a callback function that handles changes in the dynamic parameters.
-         * We then subscribe to the topic /os_cloud_node/points and call the pointCloudCallback to handle the data we recieve from it.
+         * We then subscribe to the topic /os_cloud_node/points and call the pointCloudCallback to handle the data we receive from it.
          * We define the publisher that will be called at the end of the callback function that remaps the frame_id.
          */
         server.setCallback(boost::bind(&LidarRemap::reconfigCallback, this, _1, _2));

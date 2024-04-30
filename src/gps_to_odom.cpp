@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 
     /**
      * We define the publisher of the topic /gps_odom and subscribe to the /fix topic.
-     * The subscriber calls the callback method when it recieves data.
+     * The subscriber calls the callback method when it receives data.
      */
     ros::Publisher pub = nodeHandle.advertise<nav_msgs::Odometry>("/gps_odom", 1);      //publisher
     ros::Subscriber sub = nodeHandle.subscribe("/fix", 1, fixCallback);                 //subscriber
@@ -47,8 +47,8 @@ int main(int argc, char **argv) {
      * we define all the parameters we will need throughout the node
      */
     double lat_r,lon_r,alt_r;       //INPUT parameters
-    double lat_r_lon_r_rad[2];      //transformation in radiants (parameters)
-    double lat_lon_rad[2];          //trasformation in radiants
+    double lat_r_lon_r_rad[2];      //transformation in radians (parameters)
+    double lat_lon_rad[2];          //transformation in radians
     double reference_ECEF[3];       //parameters transformed in ECEF
     double ECEF[3];                 //ECEF
     double ENU[3];                  //ENU
@@ -75,13 +75,13 @@ int main(int argc, char **argv) {
     alt = alt_r;
 
     /**
-     * we convert these values from degrees to radiants, since the <cmat> library needs radiants for sin() and cos() functions
+     * we convert these values from degrees to radians, since the <cmat> library needs radians for sin() and cos() functions
      */
     lat_r_lon_r_rad[0] = lat_r*M_PI/180;
     lat_r_lon_r_rad[1] = lon_r*M_PI/180;
 
     /**
-     * we get the reference values in ECEF
+     * we transform the reference values in ECEF
      */
     reference_ECEF[0] = ( Ntheta_r(lat_r) + alt_r ) * cos(lat_r_lon_r_rad[0]) * cos(lat_r_lon_r_rad[1]);
     reference_ECEF[1] = ( Ntheta_r(lat_r) + alt_r ) * cos(lat_r_lon_r_rad[0]) * sin(lat_r_lon_r_rad[1]);
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
         nav_msgs::Odometry private_message;
 
         /**
-         * we convert these values from degrees to radiants, just like we did for the reference values.
+         * we convert these values from degrees to radians, just like we did for the reference values.
          */
         lat_lon_rad[0] = M_PI * lat / 180;
         lat_lon_rad[1] = M_PI * lon / 180;
@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
 
         /**
          * we use the formula to calculate ENU, we commented ENU[2] because we want the 2D case
-         * ENU[2] will be always 0
+         * ENU[2] will always be 0
          */
         ENU[0] = (-sin(lat_r_lon_r_rad[1]))*(ECEF[0] - reference_ECEF[0]) 
             + (cos(lat_r_lon_r_rad[1]))*(ECEF[1] - reference_ECEF[1]) 
@@ -159,7 +159,7 @@ int main(int argc, char **argv) {
         /**
          * we compute the yaw angle with the consecutive pose technique
          * Roll and pitch are 0 because we are in 2D
-         * Code commented is for the 3D case
+         * The commented code is for the 3D case
          */
         //roll_pitch_yaw[0] = atan((ENU[0]-ENU_prec[0]) / (ENU[2]-ENU_prec[2]));
         //roll_pitch_yaw[1] = atan((ENU[2]-ENU_prec[2]) / (ENU[1]-ENU_prec[1]));
