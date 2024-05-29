@@ -1,16 +1,19 @@
 <launch>
+    <! rviz/>
     <node name="rviz" pkg="rviz" type="rviz" />
 
+    <! odom_to_tf/>
     <node name="odom_to_tf" pkg="second_project" type="odom_to_tf" output="screen">
         <remap from="input_odom" to="/ugv/odom"/>
         <param name="child_frame" value="/wheel_odom"/>
         <param name="root_frame" value="map"/>
     </node>
 
-     <node name="pointcloud_to_laserscan" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node">
-         <param name="input_point_cloud" value="/ugv/rslidar_points" />
-         <param name="output_laser_scan" value="/laser_scan" />
-     </node>
+    <! pointcloud_to_laserscan/>
+    <node name="pointcloud_to_laserscan" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node">
+        <param name="input_point_cloud" value="/ugv/rslidar_points" />
+        <param name="output_laser_scan" value="/laser_scan" />
+    </node>
 
 </launch>
 
