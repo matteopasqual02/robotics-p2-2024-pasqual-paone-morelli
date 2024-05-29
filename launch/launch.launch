@@ -2,20 +2,22 @@
     <!-- Run RViz with a specific configuration file -->
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find second_project)/cfg/config.rviz" output="screen"/>
 
-    <!-- odom_to_tf/-->
+    <!-- odom to tf -->
     <node name="odom_to_tf" pkg="second_project" type="odom_to_tf" output="screen">
         <remap from="input_odom" to="/ugv/odom"/>
         <param name="child_frame" value="/wheel_odom"/>
         <param name="root_frame" value="map"/>
     </node>
 
+    <!-- pointcloud to laserscan -->
     <node name="pointcloud_to_laserscan" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node">
         <remap from="cloud_in" to="/ugv/rslidar_points"/>
         <remap from="scan" to="/scan"/>
     </node>
 
+    <!-- lidar heder to wheel odom -->
     <node name="lidar_to_tf" pkg="second_project" type="lidar_to_tf" output="screen"/>
-    
+
 </launch>
 
 
