@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>first_project</name>
+  <name>second_project</name>
   <version>0.0.0</version>
-  <description>The first_project package</description>
+  <description>The second_project package</description>
 
   <maintainer email="teopa@todo.todo">teopa</maintainer>
 
