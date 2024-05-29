@@ -27,6 +27,12 @@ add_executable(odom_to_tf
 add_dependencies(odom_to_tf ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(odom_to_tf ${catkin_LIBRARIES})
 
+add_executable(lidar_to_tf 
+  src/lidar_to_tf.cpp
+)
+add_dependencies(lidar_to_tf  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(lidar_to_tf  ${catkin_LIBRARIES})
+
 install(FILES cfg/config.rviz
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config)
 
