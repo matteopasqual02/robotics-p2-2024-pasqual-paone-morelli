@@ -14,8 +14,9 @@
         <remap from="scan" to="/scan"/>
     </node>
 
-
+    <node name="lidar_to_tf" pkg="second_project" type="lidar_to_tf" output="screen"/>
+    
 </launch>
 
-<!--node name="lidar_to_tf" pkg="second_project" type="lidar_to_tf" output="screen"/-->
+
 
