@@ -1,6 +1,7 @@
 <launch>
     <node name="rviz" pkg="rviz" type="rviz" args="cfg/rviz_config_file.rviz" />
 
+    <! odom_to_tf/>
     <node name="odom_to_tf" pkg="second_project" type="odom_to_tf" output="screen">
         <remap from="input_odom" to="/ugv/odom"/>
         <param name="child_frame" value="/wheel_odom"/>
