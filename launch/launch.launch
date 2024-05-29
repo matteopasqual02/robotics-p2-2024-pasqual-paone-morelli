@@ -10,8 +10,9 @@
     </node>
 
     <node name="pointcloud_to_laserscan" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node">
-        <param name="input_point_cloud" value="/ugv/rslidar_points" />
-        <param name="output_laser_scan" value="/scan" />
+        <remap from="cloud_in" to="/ugv/rslidar_points"/>
+        <remap from="scan" to="/scan"/>
+        <param name="frame_id" value="wheel_odom"/>
     </node>
 
 
