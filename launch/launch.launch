@@ -1,5 +1,5 @@
 <launch>
-    <node name="rviz" pkg="rviz" type="rviz" />
+    <node name="rviz" pkg="rviz" type="rviz" args="cfg/rviz_config_file.rviz" />
 
     <node name="odom_to_tf" pkg="second_project" type="odom_to_tf" output="screen">
         <remap from="input_odom" to="/ugv/odom"/>
@@ -9,8 +9,9 @@
 
      <node name="pointcloud_to_laserscan" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node">
          <param name="input_point_cloud" value="/ugv/rslidar_points" />
-         <param name="output_laser_scan" value="/laser_scan" />
+         <param name="output_laser_scan" value="/scan" />
      </node>
+
 
 </launch>
 
