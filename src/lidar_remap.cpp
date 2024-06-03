@@ -15,7 +15,7 @@ public:
 
     void pointCloudCallback(const sensor_msgs::LaserScan::ConstPtr& msg) {
         sensor_msgs::LaserScan modified_msg = *msg;
-        modified_msg.header.frame_id = "wheel_odom";
+        modified_msg.header.frame_id = "base_link";
         modified_msg.header.stamp = ros::Time::now();
    
         pub.publish(modified_msg);
