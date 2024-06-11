@@ -36,7 +36,7 @@ public:
         //ros::Time current_time = ros::Time::now();
         //ROS_INFO("Publishing TF odom_to_base_link with timestamp: %f", current_time.toSec());
         br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), root_frame, child_frame));
-        ros::Duration(0.001).sleep();
+        //ros::Duration(0.001).sleep();
     }
 
 private:
