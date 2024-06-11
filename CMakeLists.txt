@@ -33,6 +33,10 @@ add_executable(odom_to_base_link src/odom_to_base_link.cpp src/odom_to_base_link
 add_dependencies(odom_to_base_link  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(odom_to_base_link  ${catkin_LIBRARIES})
 
+add_executable(tf src/tf.cpp src/tf.cpp)
+add_dependencies(tf  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(tf  ${catkin_LIBRARIES})
+
 install(FILES cfg/config.rviz
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config)
 

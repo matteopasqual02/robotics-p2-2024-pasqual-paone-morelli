@@ -14,12 +14,6 @@ public:
          * By subscribing to input_odom, remapped in the launchfile, we get the input data and call the callback function, which publishes the tf.
          */
         nh_private = ros::NodeHandle("~");
-        nh_private.getParam("child_frame",child_frame);
-        nh_private.getParam("root_frame",root_frame);
-
-        ROS_INFO("child_frame: %s", child_frame.c_str());
-        ROS_INFO("root_frame: %s", root_frame.c_str());
-
 
         sub = nodeHandle.subscribe("input_odom",1,&tf_sub_pub::callback, this);
     }
@@ -29,14 +23,29 @@ public:
         /**
          * We create the tf transformation by setting the translation and rotation using the input data. We then publish the tf transform.
          */
-        tf::Transform transform;
-        transform.setOrigin(tf::Vector3(msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z));
-        tf::Quaternion q(msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
-        transform.setRotation(q);
+         //first transformation: map to odom
+        tf::Transform transform1;
+        transform1.setOrigin(tf::Vector3(msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z));
+        tf::Quaternion q1(msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
+        transform1.setRotation(q1);
         ros::Time current_time = ros::Time::now();
         ROS_INFO("Publishing TF odom_to_base_link with timestamp: %f", current_time.toSec());
-        br.sendTransform(tf::StampedTransform(transform, current_time, root_frame, child_frame));
+        br.sendTransform(tf::StampedTransform(transform1, current_time, "map", "/odom"));
+
+        //delay for the other transformation
         ros::Duration(0.001).sleep();
+
+        //second transformation: odom to base_link
+        tf::Transform transform2;
+        transform2.setOrigin(tf::Vector3(msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z));
+        tf::Quaternion q2(msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
+        transform2.setRotation(q2);
+        current_time = ros::Time::now();
+        ROS_INFO("Publishing TF odom_to_base_link with timestamp: %f", current_time.toSec());
+        br.sendTransform(tf::StampedTransform(transform2, current_time, "/odom", "/base_link"));
+
+        ros::Duration(0.001).sleep();
+
     }
 
 private:
@@ -44,12 +53,10 @@ private:
     ros::NodeHandle nh_private;
     tf::TransformBroadcaster br;
     ros::Subscriber sub;
-    std::string root_frame;
-    std::string child_frame;
 };
 
 int main(int argc, char **argv){
-    ros::init(argc, argv, "odom_to_base_link");
+    ros::init(argc, argv, "tf");
 
     tf_sub_pub my_tf_sub_pub;
     ros::spin();

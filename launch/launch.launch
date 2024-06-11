@@ -22,6 +22,11 @@
     </node>
  <!--   <node pkg="tf2_ros" type="static_transform_publisher" name="lidar_link"  args=" 0  0 0  0 0 0 1 base_link /scan_tf "/>-->
 
+<!-- tf publisher-->
+    <node name="tf" pkg="second_project" type="tf" output="screen">
+        <remap from="input_odom" to="/ugv/odom"/>
+    </node>-->
+
     <!-- pointcloud to laserscan-->
     <node name="pointcloud_to_laserscan" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node">
         <remap from="cloud_in" to="/ugv/rslidar_points"/>
@@ -32,8 +37,9 @@
     <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser" args="0 0 0 0 0 0 base_link /scan_tf 100" />-->
 
     <!-- Trasformazione odom a base_link
-    <node pkg="tf" type="static_transform_publisher" name="odom_to_base_link" args="0 0 0 0 0 0 odom base_link 100" /> -->
-
+    <node pkg="tf" type="static_transform_publisher" name="odom_to_base_link" args="0 0 0 0 0 0 odom base_link 100" />
+        <remap from="input" to="/your_odom_topic"/>
+    </node>-->
     <!-- Trasformazione map a odom
     <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom 100" />-->
 
