@@ -17,7 +17,7 @@
         <remap from="scan" to="/scan"/>
     </node>
 
-    <!-- lidar heder  -->
+    <!-- lidar heder changed to base_link  -->
     <node name="lidar_remap" pkg="second_project" type="lidar_remap" output="screen"/>
 
     <!-- slam toolbox-->
@@ -26,6 +26,3 @@
     </node>
 
 </launch>
-
-
-
