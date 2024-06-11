@@ -1,4 +1,4 @@
-image: /home/arianna/catkin_ws/src/map.pgm
+image: map.pgm
 resolution: 0.050000
 origin: [-4.275880, -11.092062, 0.000000]
 negate: 0

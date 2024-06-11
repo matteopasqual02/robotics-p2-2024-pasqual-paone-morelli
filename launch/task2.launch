@@ -1,9 +1,35 @@
 <launch>
-    <!-- Run RViz  -->
+    <!-- Run RViz -->
     <node name="rviz" pkg="rviz" type="rviz" output="screen"/>
-    <!-- Simulated time -->
+
+    <!-- Use simulated time -->
     <param name="/use_sim_time" value="true"/>
 
-    
+    <!-- Arguments for map and initialization -->
+    <arg name="map_file" default="$(find second_project)/map/map.yaml"/>
+    <arg name="initial_pose_x" default="2.0"/>
+    <arg name="initial_pose_y" default="2.0"/>
+    <arg name="initial_pose_a" default="0.0"/>
+    <arg name="odom_frame_id" default="odom"/>
+    <arg name="global_frame_id" default="map"/>
 
+    <!-- Map Server Node -->
+    <node name="map_server" pkg="map_server" type="map_server" output="screen" args="$(arg map_file)"/>
+
+    <!-- Robot State Publisher Node -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="publish_frequency" type="double" value="50.0"/>
+    </node>
+
+    <!-- AMCL Node -->
+    <node name="amcl" pkg="amcl" type="amcl" output="screen">
+        <param name="odom_frame_id" value="$(arg odom_frame_id)"/>
+        <param name="global_frame_id" value="$(arg global_frame_id)"/>
+        <param name="initial_pose_x" value="$(arg initial_pose_x)"/>
+        <param name="initial_pose_y" value="$(arg initial_pose_y)"/>
+        <param name="initial_pose_a" value="$(arg initial_pose_a)"/>
+    </node>
+
+    <!-- TF Node (Static Transformation from map to odom) -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_odom_broadcaster" args="0 0 0 0 0 0 map odom" />
 </launch>

@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="default">
+
+    <include>
+      <uri>map\map.world</uri>
+      <uri>map\map.pmg</uri>
+      <uri>map\map.posegraph</uri>
+    </include>
+  </world>
+</sdf>
