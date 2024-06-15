@@ -1,11 +1,37 @@
-<?xml version="1.0" ?>
-<sdf version="1.6">
-  <world name="default">
+# map.world
+define omni_robot model
+(
+  color "red"
+  size [0.612 0.580 0.245]
+  gui_nose 1
+  drive "omni"
+)
 
-    <include>
-      <uri>map\map.world</uri>
-      <uri>map\map.pmg</uri>
-      <uri>map\map.posegraph</uri>
-    </include>
-  </world>
-</sdf>
+define map model
+(
+  bitmap "map.pgm"
+  size [20.0 20.0 1.0]
+  pose [0.0 0.0 0.0]
+  name "map"
+)
+
+window
+(
+  size [800 600]
+  scale 4.0
+)
+
+floorplan
+(
+  name "floorplan"
+  bitmap "map.pgm"
+  size [20.0 20.0 1.0]
+  pose [0.0 0.0 0.0]
+)
+
+robot
+(
+  name "scout_mini_omni"
+  pose [1.0 1.0 0.0 0.0]
+  model "omni_robot"
+)
