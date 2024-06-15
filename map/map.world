@@ -1,4 +1,3 @@
-# map.world
 define omni_robot model
 (
   color "red"

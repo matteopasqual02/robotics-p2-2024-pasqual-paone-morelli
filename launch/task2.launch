@@ -6,6 +6,7 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
   <!-- Name of the map to use and initial position -->
   <arg name="map_file"       default="$(find second_project)/map/map.yaml"/> 
   <arg name="world_file"     default="$(find second_project)/map/map.world"/>
+  
   <arg name="initial_pose_x" default="2.0"/>
   <arg name="initial_pose_y" default="2.0"/>
   <arg name="initial_pose_a" default="0.0"/>
@@ -24,8 +25,11 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
 
 
   <!--  ***************** Robot Model *****************  -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="true"/>
+    <param name="gui_publish_rate" value="50.0"/>
     <param name="robot_description" textfile="$(find second_project)/map/scout_mini_omni.urdf"/>
+    
   </node>
 
 
