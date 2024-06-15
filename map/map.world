@@ -13,24 +13,21 @@ define kinect ranger
   size [ 0.06 0.15 0.03 ]
 )
 
-define turtlebot position
+define scout_mini_omni position
 (
   pose [ 0.0 0.0 0.0 0.0 ]
   
   localization "odom"
-
-
   odom_error [0.2 0.2 0.0 0.3 ]
 
-  size [ 0.2552 0.2552 0.40 ]
+  size [ 0.612 0.580 0.245 ]
   origin [ 0.0 0.0 0.0 0.0 ]
   gui_nose 1
-  drive "diff"
-  color "grey"
+  drive "omni"
+  color "red"
   
   kinect()
 )
-
 
 define floorplan model
 (
@@ -68,11 +65,9 @@ floorplan
 )
 
 # throw in a robot
-turtlebot
+scout_mini_omni
 (
-  pose [ 2.0 2.0 0.0 0.0 ]
-  name "turtlebot"
-  color "black"
+  pose [ 0.0 0.0 0.0 0.0 ]
+  name "scout_mini_omni"
+  color "red"
 )
-
-
