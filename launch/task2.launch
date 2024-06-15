@@ -1,40 +1,46 @@
-
 <launch>
-  <arg name="base"       default="burger"/>  <!-- create_circles_asus_xtion_pro create_circles_kinect kobuki_hexagons_astra kobuki_hexagons_asus_xtion_pro kobuki_hexagons_asus_xtion_pro 
-kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba_circles_kinect -->
+  <!-- Gen -->
+  <arg name="base"       default="burger"/>  
 
-  <!-- Name of the map to use and initial position -->
+  <!-- Rviz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find second_project)/cfg/config2.rviz"/>
+
+  <!-- Name of the map to use -->
   <arg name="map_file"       default="$(find second_project)/map/map.yaml"/> 
   <arg name="world_file"     default="$(find second_project)/map/map.world"/>
   
+  <!-- Initial position -->
   <arg name="initial_pose_x" default="0.0"/>
   <arg name="initial_pose_y" default="0.0"/>
   <arg name="initial_pose_a" default="0.0"/>
 
+  <!-- Frame -->
   <arg name="odom_frame_id"   default="odom"/>
   <arg name="global_frame_id" default="map"/>
 
+  <!-- Sim time -->
   <param name="/use_sim_time" value="true"/>
 
-
- <!--  ***************** Robot simulation *****************  -->
+  <!-- Robot simulation -->
   <node pkg="stage_ros" type="stageros" name="stageros" args="$(arg world_file)">
     <param name="base_watchdog_timeout" value="0.5"/>
     <remap from="base_scan" to="scan"/>
   </node>
 
-
-  <!--  ***************** Robot Model *****************  -->
+  <!-- Robot Model -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="use_gui" value="true"/>
     <param name="gui_publish_rate" value="50.0"/>
     <param name="robot_description" textfile="$(find second_project)/map/scout_mini_omni.urdf"/>
-    
   </node>
 
+  <!-- Maps -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)">
+    <param name="frame_id" value="map"/>
+  </node>
 
-  <!--  ************** Navigation  ***************  -->
-   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+  <!-- Navigation -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find second_project)/cfg/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find second_project)/cfg/costmap_common_params.yaml" command="load" ns="local_costmap" />   
     <rosparam file="$(find second_project)/cfg/local_costmap_params.yaml" command="load" />   
@@ -53,14 +59,7 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
     <param name="clearing_rotation_allowed" value="true"/> 
   </node>
 
-
-  <!--  ****** Maps *****  -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)">
-    <param name="frame_id" value="map"/>
-  </node>
-
-
-  <!--  ****** amcl *****  -->
+  <!-- amcl -->
   <include file="$(find second_project)/launch/amcl_launch.xml">
     <arg name="scan_topic" value="scan"/>
     <arg name="use_map_topic" value="true"/>
@@ -69,7 +68,4 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
     <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
   </include>
 
-
-  <!--  **************** Visualisation ****************  -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find second_project)/cfg/config2.rviz"/>
 </launch>

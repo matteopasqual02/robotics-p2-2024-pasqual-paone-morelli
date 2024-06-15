@@ -1,6 +1,9 @@
 #include "ros/ros.h"
 #include "sensor_msgs/LaserScan.h"
 
+/*
+ * NODE 3 first project
+ */
 class LidarRemap {
 private:
     ros::NodeHandle nodeHandle;

@@ -1,7 +1,8 @@
 <launch>
-    <!-- Run RViz with a specific configuration file -->
+    <!-- rviz  -->
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find second_project)/cfg/config.rviz" output="screen"/>
-    <!-- Simulated time -->
+    
+    <!-- Sim time -->
     <param name="/use_sim_time" value="true"/>
 
     <!-- odom to base_link-->
