@@ -1,0 +1,44 @@
+ROBOT PARAMETERS:
+OMINIDIRECTIONAL ROBOT
+
+Mechanical Dimensions (mm) 612x580x245
+Axle Track (mm) 451
+Front/rear track (mm) 490
+Kerb weight (Kg) 23
+Battery type Lithium battery
+Battery parameters 24V 15Ah
+Power drive motor
+DC brushless 4 X 150W
+(Mecanum wheel 150W)
+Drive type Independent four-wheel drive
+Steering drive motor -
+Parking type Servo brake/anti-collision tube
+Steering type Four-wheel differential steering
+Suspension
+Independent suspension with
+rocker arm
+Steering motor reduction ratio -
+Steering motor encoder -
+1.3 Requirement for development
+FS RC transmitter is provided optionally in the factory settings of SCOUT MINI and it allows users
+to control the mobile chassis to move and turn; the CAN provided on SCOUT MINI can be used
+for secondary development via the CAN interface.
+2 The Basics
+Drive motor reduction ratio 1：4.3
+Drive motor sensor Hall
+Performation
+IP grade IP22
+Maximum speed（km/h） 10
+Minimum turning radius (mm) 0
+Maximum gradeability (°) 30°
+Ground clearance (mm) 115
+Maximum endurance (h) 8
+Maximum travel (km) 10KM
+Charging time (h) 2H
+Working temperature (℃) -10C°~40C°
+Control
+Control mode
+Remote control mode
+Command control mode
+Remote controller 2.4G/limit distance 200M
+Communication Interface CAN
