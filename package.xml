@@ -18,6 +18,7 @@
   <build_depend>tf</build_depend>
   <build_depend>pointcloud_to_laserscan</build_depend>
   <build_depend>rviz</build_depend>
+  <build_depend>move_base</build_depend>
 
   <build_export_depend>nav_msgs</build_export_depend>
   <build_export_depend>sensor_msgs</build_export_depend>
@@ -27,6 +28,7 @@
   <build_export_depend>tf</build_export_depend>
   <build_export_depend>pointcloud_to_laserscan</build_export_depend>
   <build_export_depend>rviz</build_export_depend>
+  <build_export_depend>move_base</build_export_depend>
 
   <exec_depend>nav_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
@@ -36,6 +38,7 @@
   <exec_depend>tf</exec_depend>
   <exec_depend>pointcloud_to_laserscan</exec_depend>
   <exec_depend>rviz</exec_depend>
+  <exec_depend>move_base</exec_depend>
 
   <export>
   

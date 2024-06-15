@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
         tf
         pointcloud_to_laserscan
         rviz
+        move_base
         )
 
 

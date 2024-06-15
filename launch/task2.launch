@@ -24,11 +24,8 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
 
 
   <!--  ***************** Robot Model *****************  -->
-  <include file="$(find second_project)/map/scout_mini_omni.urdf">
-    <arg name="model" value="$(arg base)" />
-  </include>
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-    <param name="use_gui" value="false"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <param name="robot_description" textfile="$(find second_project)/map/scout_mini_omni.urdf"/>
   </node>
 
 
@@ -60,7 +57,7 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
 
 
   <!--  ****** amcl *****  -->
-  <include file="$(find second_project)/launch/amcl.launch.xml">
+  <include file="$(find second_project)/launch/amcl_launch.xml">
     <arg name="scan_topic" value="scan"/>
     <arg name="use_map_topic" value="true"/>
     <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
