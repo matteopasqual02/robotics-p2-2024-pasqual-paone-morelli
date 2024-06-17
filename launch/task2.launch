@@ -69,9 +69,8 @@
   </include>
 
   <!-- goal -->
-  <param name="file_path" value="$(find second_project)/goal/waypoints.csv"/>
   <node pkg="second_project" type="goal_action" name="goal_action" output="screen">
-    <param name="file_path" value="$(arg file_path)"/>
+    <param name="file_path" value="$(find second_project)/goal/waypoints.csv"/>
   </node>
 
 </launch>

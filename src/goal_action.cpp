@@ -20,7 +20,7 @@ std::vector<Goal> readGoalsFromCSV(const std::string& file_path) {
     std::ifstream file(file_path);
     if (!file.is_open()) {
         ROS_ERROR_STREAM("Failed to open file: " << file_path);
-        return NULL;
+        return goals;
     }
 
     std::string line;
