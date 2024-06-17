@@ -49,38 +49,39 @@ void sendGoals(const std::vector<Goal>& goals) {
     MoveBaseClient ac("move_base", true);
 
     while (!ac.waitForServer(ros::Duration(5.0))) {
-        ROS_INFO("Waiting for the move_base action server to come up");
+        ROS_INFO("Waiting server come up");
     }
 
     for (const auto& goal : goals) {
         move_base_msgs::MoveBaseGoal goal_msg;
+
         goal_msg.target_pose.header.frame_id = "map"; 
         goal_msg.target_pose.header.stamp = ros::Time::now();
         goal_msg.target_pose.pose.position.x = goal.x;
         goal_msg.target_pose.pose.position.y = goal.y;
-
+        goal_msg.target_pose.pose.position.z=0;
         tf::Quaternion q;
         q.setRPY(0, 0, goal.yaw);
         tf::quaternionTFToMsg(q, goal_msg.target_pose.pose.orientation);
 
-        ROS_INFO("Sending goal: (%.2f, %.2f, %.2f)", goal.x, goal.y, goal.yaw);
+        ROS_INFO("Goal: (%.2f, %.2f, %.2f)", goal.x, goal.y, goal.yaw);
         ac.sendGoal(goal_msg);
 
-        bool finished_before_timeout = ac.waitForResult(ros::Duration(30.0));
+        bool finished_before_timeout = ac.waitForResult(ros::Duration(40.0));
 
         if (finished_before_timeout) {
             actionlib::SimpleClientGoalState state = ac.getState();
             if (state == actionlib::SimpleClientGoalState::SUCCEEDED) {
-                ROS_INFO("Goal reached successfully.");
+                ROS_INFO("Goal reached.");
             } else {
                 ROS_WARN("Goal failed: %s", state.toString().c_str());
             }
         } else {
-            ROS_WARN("Action did not finish before the time out.");
+            ROS_WARN("Time out.");
         }
     }
 
-    ROS_INFO("All goals have been sent.");
+    ROS_INFO("CSV finished.");
 }
 
 int main(int argc, char** argv) {
@@ -88,11 +89,11 @@ int main(int argc, char** argv) {
     ros::NodeHandle nh("~");
 
     std::string file_path;
-    nh.param<std::string>("file_path", file_path, "goals.csv"); // Default file path
+    nh.param<std::string>("file_path", file_path, "waypoints.csv"); 
 
     std::vector<Goal> goals = readGoalsFromCSV(file_path);
     if (goals.empty()) {
-        ROS_ERROR("No goals to send. Exiting.");
+        ROS_ERROR("No goals to send.");
         return 1;
     }
 
