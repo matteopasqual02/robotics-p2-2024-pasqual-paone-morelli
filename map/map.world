@@ -59,7 +59,7 @@ window
 floorplan
 (
   name "map"
-  bitmap "map.pgm"
+  bitmap "map.png"
   size [ 10.0 10.0 2.0 ]
   pose [  5.0  5.0 0.0 0.0 ]
 )

@@ -48,7 +48,7 @@ std::vector<Goal> readGoalsFromCSV(const std::string& file_path) {
 void sendGoals(const std::vector<Goal>& goals) {
     MoveBaseClient ac("move_base", true);
 
-    while (!ac.waitForServer(ros::Duration(5.0))) {
+    while (!ac.waitForServer(ros::Duration(10.0))) {
         ROS_INFO("Waiting server come up");
     }
 
@@ -67,7 +67,7 @@ void sendGoals(const std::vector<Goal>& goals) {
         ROS_INFO("Goal: (%.2f, %.2f, %.2f)", goal.x, goal.y, goal.yaw);
         ac.sendGoal(goal_msg);
 
-        bool finished_before_timeout = ac.waitForResult(ros::Duration(40.0));
+        bool finished_before_timeout = ac.waitForResult(ros::Duration(60.0));
 
         if (finished_before_timeout) {
             actionlib::SimpleClientGoalState state = ac.getState();
