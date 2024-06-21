@@ -18,9 +18,9 @@ define scout_mini_omni position
   pose [ 0.0 0.0 0.0 0.0 ]
   
   localization "odom"
-  odom_error [0.2 0.2 0.0 0.3 ]
+  odom_error [0.1 0.1 0.0 0.15 ]
 
-  size [ 0.153 0.145 0.06125 ]
+  size [ 0.627 0.550 0.1]
   origin [ 0.0 0.0 0.0 0.0 ]
   gui_nose 1
   drive "omni"
