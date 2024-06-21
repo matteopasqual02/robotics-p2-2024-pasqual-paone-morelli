@@ -8,13 +8,13 @@
     </inertial>
     <visual>
       <geometry>
-        <box size="0.612 0.580 0.245"/>
+        <box size="0.153 0.145 0.06125"/>
       </geometry>
       <material name="red"/>
     </visual>
     <collision>
       <geometry>
-        <box size="0.612 0.580 0.245"/>
+        <box size="0.153 0.145 0.06125"/>
       </geometry>
     </collision>
   </link>
