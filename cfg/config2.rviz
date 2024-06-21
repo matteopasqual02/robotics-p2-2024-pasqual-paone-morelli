@@ -6,6 +6,8 @@ Panels:
       Expanded:
         - /TF1/Frames1
         - /TF1/Tree1
+        - /LaserScan (kinect)1
+        - /Polygon1
       Splitter Ratio: 0.5
     Tree Height: 786
   - Class: rviz/Selection
@@ -88,7 +90,7 @@ Visualization Manager:
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.009999999776482582
+      Size (m): 0.029999999329447746
       Style: Squares
       Topic: /scan
       Unreliable: false
@@ -348,7 +350,7 @@ Visualization Manager:
       Value: false
     - Alpha: 1
       Class: rviz/Polygon
-      Color: 25; 255; 0
+      Color: 0; 0; 255
       Enabled: true
       Name: Polygon
       Queue Size: 10

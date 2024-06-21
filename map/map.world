@@ -20,7 +20,7 @@ define scout_mini_omni position
   localization "odom"
   odom_error [0.1 0.1 0.0 0.15 ]
 
-  size [ 0.627 0.550 0.1]
+  size [ 0.31 0.28 0.1]
   origin [ 0.0 0.0 0.0 0.0 ]
   gui_nose 1
   drive "omni"
@@ -60,7 +60,7 @@ floorplan
 (
   name "map"
   bitmap "map.png"
-  size [ 28.4 15.25 2.0 ]
+  size [ 27 14.4 2.0 ]
   pose [ 0.0 0.0 0.0 0.0 ]
 )
 
