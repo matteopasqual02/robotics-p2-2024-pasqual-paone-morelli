@@ -53,7 +53,7 @@ window
   size [ 570 305 ]
   center [ 0.0 0.0 ]
   rotate [ 0.0 0.0 ]
-  scale 60
+  scale 20
 )
 
 floorplan
