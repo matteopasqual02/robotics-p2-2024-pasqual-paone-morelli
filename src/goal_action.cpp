@@ -67,7 +67,7 @@ void sendGoals(const std::vector<Goal>& goals) {
         ROS_INFO("Goal: (%.2f, %.2f, %.2f)", goal.x, goal.y, goal.yaw);
         ac.sendGoal(goal_msg);
 
-        bool finished_before_timeout = ac.waitForResult(ros::Duration(60.0));
+        bool finished_before_timeout = ac.waitForResult(ros::Duration(62.0));
 
         if (finished_before_timeout) {
             actionlib::SimpleClientGoalState state = ac.getState();
